@@ -2,6 +2,7 @@ package com.zendesk.search.services;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -20,15 +21,15 @@ public class InvertedIndexServiceImpl implements InvertedIndexService{
 
     @Override
     public Map<String, List<String>> createInvertedIndex(String fileResource) {
-        URL resource = InvertedIndexServiceImpl.class.getClassLoader().getResource(fileResource);
-        if (resource == null) {
+        InputStream inputStream = InvertedIndexServiceImpl.class.getClassLoader().getResourceAsStream(fileResource);
+        if (inputStream == null) {
             throw new IllegalArgumentException(fileResource + " file not found!");
         }
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            JsonNode root = objectMapper.readTree(new File(resource.toURI()));
+            JsonNode root = objectMapper.readTree(inputStream);
             traverseJsonDoc(root);
-        } catch (IOException | URISyntaxException ex) {
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
         return invertedIndex;

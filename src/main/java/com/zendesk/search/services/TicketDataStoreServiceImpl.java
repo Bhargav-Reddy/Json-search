@@ -2,6 +2,7 @@ package com.zendesk.search.services;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -21,23 +22,22 @@ public class TicketDataStoreServiceImpl implements DataStoreService<Ticket> {
     public Map<String, Ticket> createDataStore(String fileResource ) {
         List<Ticket> ticketList = new ArrayList<>();
         Map<String, Ticket> ticketDataStore = new HashMap<>();
-        URL resource = getClass().getClassLoader().getResource(fileResource);
-        if (resource == null) {
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileResource);
+        if (inputStream == null) {
             throw new IllegalArgumentException(fileResource + " file not found!");
         }
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            JsonNode root = objectMapper.readTree(new File(resource.toURI()));
             TypeFactory typeFactory = objectMapper.getTypeFactory();
             CollectionType collectionType = typeFactory.constructCollectionType(
                     List.class, Ticket.class);
-            ticketList = objectMapper.readValue(new File(resource.toURI()), collectionType);
+            ticketList = objectMapper.readValue(inputStream, collectionType);
             for (Ticket ticket : ticketList) {
                 if (!ticketDataStore.containsKey(ticket.get_id())) {
                     ticketDataStore.put(ticket.get_id(), ticket);
                 }
             }
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return ticketDataStore;

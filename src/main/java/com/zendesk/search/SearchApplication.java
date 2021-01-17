@@ -15,6 +15,7 @@ public class SearchApplication {
 
         CLIUtil.printWelcomeMessage();
         Scanner scanner = new Scanner(System.in);
+        scanner.useDelimiter(System.lineSeparator());
         String selectedOption = scanner.nextLine();
         if(selectedOption.equalsIgnoreCase("quit")){
             CLIUtil.printQuitMessage();
