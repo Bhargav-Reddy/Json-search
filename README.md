@@ -14,7 +14,12 @@ Zendesk-search is a simple json data search application written in Java 8.
 * go to zendesk-search folder
 * run with gradle
 
-    `$ ./gradlew run -q --console=plain`
+    ```
+    $ ./gradlew clean build
+    $ ./gradlew run -q --console=plain
+    ```
+    
+    
 * (or)run with jar
 
     ```
