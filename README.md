@@ -1,4 +1,4 @@
-zendesk-search
+Json-search
 ==============
 
 Zendesk-search is a simple json data search application written in Java 8.
